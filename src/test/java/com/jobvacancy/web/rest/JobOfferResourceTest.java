@@ -66,7 +66,8 @@ public class JobOfferResourceTest {
     private static final String UPDATED_LOCATION = "UPDATED_TEXT";
     private static final String DEFAULT_DESCRIPTION = "SAMPLE_TEXT";
     private static final String UPDATED_DESCRIPTION = "UPDATED_TEXT";
-
+    private static final Long  EXPERIENCIA= new Long(0); 
+   
     @Inject
     private PasswordEncoder passwordEncoder;
 
@@ -114,6 +115,8 @@ public class JobOfferResourceTest {
         jobOffer.setTitle(DEFAULT_TITLE);
         jobOffer.setLocation(DEFAULT_LOCATION);
         jobOffer.setDescription(DEFAULT_DESCRIPTION);
+        jobOffer.setExperiencia(null);
+
     }
 
     public static class MockSecurityContext implements SecurityContext {
@@ -156,6 +159,7 @@ public class JobOfferResourceTest {
         assertThat(testJobOffer.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testJobOffer.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testJobOffer.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testJobOffer.getExperiencia()).isEqualTo(EXPERIENCIA);
     }
 
     @Test
