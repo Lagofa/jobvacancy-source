@@ -66,7 +66,8 @@ public class JobOfferResourceTest {
     private static final String UPDATED_LOCATION = "UPDATED_TEXT";
     private static final String DEFAULT_DESCRIPTION = "SAMPLE_TEXT";
     private static final String UPDATED_DESCRIPTION = "UPDATED_TEXT";
-    private static final Long  EXPERIENCIA= new Long(0); 
+    private static final Long  DEFAULT_EXPERIENCIA= new Long(0);
+    private static final Long  UPDATED_EXPERIENCIA= new Long(3);
    
     @Inject
     private PasswordEncoder passwordEncoder;
@@ -159,7 +160,7 @@ public class JobOfferResourceTest {
         assertThat(testJobOffer.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testJobOffer.getLocation()).isEqualTo(DEFAULT_LOCATION);
         assertThat(testJobOffer.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testJobOffer.getExperiencia()).isEqualTo(EXPERIENCIA);
+        assertThat(testJobOffer.getExperiencia()).isEqualTo(DEFAULT_EXPERIENCIA);
     }
 
     @Test
@@ -192,6 +193,7 @@ public class JobOfferResourceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(jobOffer.getId().intValue())))
+                .andExpect(jsonPath("$.[*].experiencia").value(hasItem(jobOffer.getExperiencia().intValue())))
                 .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
                 .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION.toString())))
                 .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
@@ -208,6 +210,7 @@ public class JobOfferResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(jobOffer.getId().intValue()))
+ //           .andExpect(jsonPath("$.[*].experiencia").value(hasItem(jobOffer.getExperiencia().intValue())))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
             .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
@@ -233,6 +236,8 @@ public class JobOfferResourceTest {
         jobOffer.setTitle(UPDATED_TITLE);
         jobOffer.setLocation(UPDATED_LOCATION);
         jobOffer.setDescription(UPDATED_DESCRIPTION);
+        jobOffer.setExperiencia(UPDATED_EXPERIENCIA);
+
 
 
         restJobOfferMockMvc.perform(put("/api/jobOffers")
@@ -245,6 +250,7 @@ public class JobOfferResourceTest {
         assertThat(jobOffers).hasSize(databaseSizeBeforeUpdate);
         JobOffer testJobOffer = jobOffers.get(jobOffers.size() - 1);
         assertThat(testJobOffer.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testJobOffer.getExperiencia()).isEqualTo(UPDATED_EXPERIENCIA);
         assertThat(testJobOffer.getLocation()).isEqualTo(UPDATED_LOCATION);
         assertThat(testJobOffer.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }

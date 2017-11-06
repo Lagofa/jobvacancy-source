@@ -58,7 +58,6 @@ public class JobOfferResource {
         Optional<User> currentUser = userRepository.findOneByLogin(currentLogin);
         jobOffer.setOwner(currentUser.get());
         if(jobOffer.getExperiencia()==null){
-       System.out.println("holaaaaaa");
         	jobOffer.setExperiencia(new Long(0));;
         }
         	
