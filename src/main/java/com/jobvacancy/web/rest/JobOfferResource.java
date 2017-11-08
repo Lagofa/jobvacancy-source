@@ -27,7 +27,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.Optional;
 
 /**
@@ -62,7 +61,10 @@ public class JobOfferResource {
         jobOffer.setOwner(currentUser.get());
         if(jobOffer.getExperiencia()==null){
         	jobOffer.setExperiencia(new Long(0));;
-        }
+        }else
+        	if(jobOffer.getExperiencia()<new Long(0)){
+        		return ResponseEntity.badRequest().header("Failure", "Ingrese un numero mayor o igual a 0").body(null);	
+        	}
         	
         JobOffer result = jobOfferRepository.save(jobOffer);
         return ResponseEntity.created(new URI("/api/jobOffers/" + result.getId()))

@@ -210,7 +210,6 @@ public class JobOfferResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(jobOffer.getId().intValue()))
- //           .andExpect(jsonPath("$.[*].experiencia").value(hasItem(jobOffer.getExperiencia().intValue())))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
             .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()));
@@ -223,6 +222,18 @@ public class JobOfferResourceTest {
         restJobOfferMockMvc.perform(get("/api/jobOffers/{id}", Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
+    
+    @Test
+    @Transactional
+    public void nonCreateJobOffer() throws Exception {
+    	jobOffer.setExperiencia(new Long(-4));
+    	restJobOfferMockMvc.perform(post("/api/jobOffers")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(jobOffer)))
+                .andExpect(status().isBadRequest());
+    }
+    
+    
 
     @Test
     @Transactional
