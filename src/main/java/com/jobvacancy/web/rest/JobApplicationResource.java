@@ -46,9 +46,13 @@ public class JobApplicationResource {
     public ResponseEntity<JobOffer> createJobApplication(@Valid @RequestBody JobApplicationDTO jobApplication) throws URISyntaxException {
         log.debug("REST request to save JobApplication : {}", jobApplication);
         JobOffer jobOffer = jobOfferRepository.findOne(jobApplication.getOfferId());
-        this.mailService.sendApplication(jobApplication.getEmail(), jobOffer);
-
+        if(this.mailService.sendApplication(jobApplication.getEmail(), jobOffer, jobApplication.getLink_CV())){
         return ResponseEntity.accepted()
-            .headers(HeaderUtil.createAlert("Application created and sent offer's owner", "")).body(null);
-    }
+	            .headers(HeaderUtil.createAlert("Application created and sent offer's owner", "")).body(null);
+        }
+        else
+        	return ResponseEntity.badRequest()
+    	            .headers(HeaderUtil.createAlert("Application not created: invalidLink", "")).body(null);
+            
+        }
 }
