@@ -129,6 +129,5 @@ public class ApplicationResourceTest {
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(dto)))
                 .andExpect(status().isAccepted());
-        assertThat(jobOfferRepository.findOne(OFFER_ID).getPostulations()==1);
-    }
+        assertThat(jobOfferRepository.findOne(OFFER_ID).getPostulations()).isEqualTo(new Long(1));    }
 }

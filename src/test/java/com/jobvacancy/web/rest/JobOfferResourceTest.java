@@ -337,5 +337,23 @@ public class JobOfferResourceTest {
         assertThat(testJobOffer.getStartDate()).isEqualTo(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         assertThat(testJobOffer.getEndDate()).isEqualTo(tomorrow);       
     }
+    
+    @Transactional
+    public void getJobOfferActive() throws Exception {
+        Date today=Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date tomorrow=new Date(today.getTime() + TimeUnit.DAYS.toMillis(1));
+        jobOffer.setEndDate(tomorrow);
+        restJobOfferMockMvc.perform(post("/api/jobOffers")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(jobOffer)))
+                .andExpect(status().isCreated());
+
+        restJobOfferMockMvc.perform(get("/api/jobOffers"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.[*].id").value(hasItem(jobOffer.getId().intValue())))
+        .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
+        .andExpect(jsonPath("$.[*].endDate").value(hasItem(tomorrow.toString())));
+    }
 
 }

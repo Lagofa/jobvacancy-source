@@ -15,5 +15,10 @@ public interface JobOfferRepository extends JpaRepository<JobOffer,Long> {
     
     @Query("select jobOffer from JobOffer jobOffer where jobOffer.startDate <= CURRENT_DATE AND jobOffer.endDate >= CURRENT_DATE")
     List<JobOffer> findOffers();
-
+    
+    @Query("select jobOffer from JobOffer jobOffer where jobOffer.endDate >= CURRENT_DATE")
+    List<JobOffer> findJobOffersActives();
+    
+    @Query("select jobOffer from JobOffer jobOffer where jobOffer.endDate < CURRENT_DATE")
+    List<JobOffer> findJobOffersExpired();
 }

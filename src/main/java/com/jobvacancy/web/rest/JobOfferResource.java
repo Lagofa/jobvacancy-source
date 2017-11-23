@@ -27,6 +27,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,17 +102,22 @@ public class JobOfferResource {
                 .body(result);
     }
 
-     @RequestMapping(value = "/jobOffers",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<JobOffer>> getAllJobOffers(Pageable pageable)
-        throws URISyntaxException {
-        List<JobOffer> list = jobOfferRepository.findByOwnerIsCurrentUser();
-        Page<JobOffer> page = createJobOfferPage(list);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/jobOffers");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+    @RequestMapping(value = "/jobOffers",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+        @Timed
+        public ResponseEntity<List<JobOffer>> getAllJobOffers(Boolean view)
+            throws URISyntaxException {
+        	 Page<JobOffer> page=null;
+            if(view){
+            	 page = searchJobOffersActived();
+            }
+            else{
+            	page=searchJobOffersExpired();
+            }
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/jobOffers");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        }
 
 	private Page<JobOffer> createJobOfferPage(final List<JobOffer> list) {
 	    return new Page<JobOffer>() {
@@ -238,5 +244,32 @@ public class JobOfferResource {
     	}
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/offers");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+    
+    private Page<JobOffer> searchJobOffersActived(){
+    	Page<JobOffer> page=null;
+        List<JobOffer> list = new LinkedList<JobOffer>(); 
+        list=jobOfferRepository.findJobOffersActives();
+        if(list.size()>0){
+        	 page = createJobOfferPage(list);
+        }
+        else{
+        	page=createJobOfferPage(new LinkedList<JobOffer>());
+        }
+        page = createJobOfferPage(list);
+        return page;
+    }
+    
+    private Page<JobOffer> searchJobOffersExpired(){
+    	Page<JobOffer> page=null;
+        List<JobOffer> list =new LinkedList<JobOffer>(); 
+        list=jobOfferRepository.findJobOffersExpired();
+        if(list.size()>0){
+        	 page = createJobOfferPage(list);
+        }
+        else{
+        	page=createJobOfferPage(new LinkedList<JobOffer>());
+        }
+        return page;
     }
 }
