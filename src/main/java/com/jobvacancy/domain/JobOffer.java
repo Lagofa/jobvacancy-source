@@ -5,7 +5,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 
 import com.jobvacancy.domain.exception.DateException;
-import com.jobvacancy.domain.util.ValidatorDate;
+import com.jobvacancy.domain.exception.ExperienceException;
+import com.jobvacancy.domain.exception.TitleException;
+import com.jobvacancy.domain.util.ValidatorJobOffer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -69,8 +71,9 @@ public class JobOffer implements Serializable {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(String title) throws TitleException{
+    	ValidatorJobOffer validator=  new ValidatorJobOffer();
+        this.title = validator.validateTitle(title);
     }
 
     public String getLocation() {
@@ -101,8 +104,9 @@ public class JobOffer implements Serializable {
         return experiencia;
     }
 
-    public void setExperiencia(Long experiencia) {
-        this.experiencia = experiencia;
+    public void setExperiencia(Long experiencia)  throws ExperienceException{
+    	ValidatorJobOffer validator=  new ValidatorJobOffer();    
+    	this.experiencia = validator.validateExperience(experiencia);
     }
     
     public Date getStartDate() {
@@ -119,7 +123,7 @@ public class JobOffer implements Serializable {
     }
     
     public void setEndDate(Date endDate) throws DateException {
-    	ValidatorDate validator=  new ValidatorDate();    
+    	ValidatorJobOffer validator=  new ValidatorJobOffer();    
     	this.endDate= validator.validateEndDate(this.startDate,endDate);
     }
     

@@ -63,7 +63,7 @@ public class US31StepDefs {
 	@Then("^el oferente ve la jobOffer \"([^\"]*)\" no vencida$")
 	public void el_oferente_ve_la_jobOffer(String arg1) throws Throwable {
 		assertThat(jobOffers.get(0).getTitle()).isEqualTo("Programador Java");
-	    jobOfferRepository.deleteAll();
+	   jobOfferRepository.deleteAll();
 	}
 	
 	@Given("^existe una jobOffer \"([^\"]*)\" con vencimiento ayer$")

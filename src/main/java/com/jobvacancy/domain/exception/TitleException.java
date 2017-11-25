@@ -1,12 +1,13 @@
 package com.jobvacancy.domain.exception;
 
-public class DateException extends JobOfferException{
+
+public class TitleException extends JobOfferException{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public DateException(String msg){
+	public TitleException(String msg){
 		super(msg);
 	}
 

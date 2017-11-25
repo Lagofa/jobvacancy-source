@@ -3,6 +3,7 @@ package com.jobvacancy.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.jobvacancy.domain.JobOffer;
 import com.jobvacancy.domain.User;
+import com.jobvacancy.domain.exception.JobOfferException;
 import com.jobvacancy.repository.JobOfferRepository;
 import com.jobvacancy.repository.UserRepository;
 import com.jobvacancy.security.SecurityUtils;
@@ -56,23 +57,15 @@ public class JobOfferResource {
     public ResponseEntity<JobOffer> createJobOffer(@Valid @RequestBody JobOffer jobOffer) throws URISyntaxException {
         log.debug("REST request to save JobOffer : {}", jobOffer);
         ValidatorJobOffer validator = new ValidatorJobOffer();
-        if (jobOffer.getId() != null) {
-            return ResponseEntity.badRequest().header("Failure", "A new jobOffer cannot already have an ID").body(null);
-        }
-        jobOffer= validator.validateJobOffer(jobOffer);
-        if(jobOffer.getTitle()==null){
-        	return ResponseEntity.badRequest().header("Failure", "Ingrese fechas startDate o endDate correctas").body(null);		
+        try{
+        	validator.validateJobOffer(jobOffer);
+        }catch(JobOfferException exception){
+        	return ResponseEntity.badRequest().header("Failure", exception.getMessage()).body(null);
         }
         jobOffer.setPostulations(new Long(0));
         String currentLogin = SecurityUtils.getCurrentLogin();
         Optional<User> currentUser = userRepository.findOneByLogin(currentLogin);
-        jobOffer.setOwner(currentUser.get());
-        if(jobOffer.getExperiencia()==null){
-        	jobOffer.setExperiencia(new Long(0));;
-        }else
-        	if(jobOffer.getExperiencia()<new Long(0)){
-        		return ResponseEntity.badRequest().header("Failure", "Ingrese un numero mayor o igual a 0").body(null);	
-        	}    	
+        jobOffer.setOwner(currentUser.get());    	
         JobOffer result = jobOfferRepository.save(jobOffer);
         return ResponseEntity.created(new URI("/api/jobOffers/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert("jobOffer", result.getId().toString()))
@@ -89,9 +82,10 @@ public class JobOfferResource {
     public ResponseEntity<JobOffer> updateJobOffer(@Valid @RequestBody JobOffer jobOffer) throws URISyntaxException {
         log.debug("REST request to update JobOffer : {}", jobOffer);
         ValidatorJobOffer validator = new ValidatorJobOffer();
-    	jobOffer= validator.validateJobOffer(jobOffer);
-    	if(jobOffer.getTitle()==null){
-        	return ResponseEntity.badRequest().header("Failure", "Ingrese fechas startDate o endDate correctas").body(null);		
+        try{
+        	validator.validateJobOffer(jobOffer);
+        }catch(JobOfferException exception){
+        	return ResponseEntity.badRequest().header("Failure", exception.getMessage()).body(null);
         }
     	if (jobOffer.getId() == null) {
             return createJobOffer(jobOffer);

@@ -63,7 +63,7 @@ public class ExperienciaStepDefs {
 
     private JobOffer jobOffer;
 
-    private ResultActions actions;
+    
 
     @Before
     public void setup() {
@@ -106,11 +106,7 @@ public class ExperienciaStepDefs {
 	
 	@When("^ingresa (\\d+) negativo como experiencia requerida and save nueva oferta de trabajo$")
 	public void ingresa_negativo_como_experiencia_requerida_and_save_nueva_oferta_de_trabajo(int arg1) throws Throwable {
-		jobOffer.setExperiencia(new Long(-arg1));
-		actions=restJobOfferMockMvc.perform(post("/api/jobOffers")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(jobOffer)))
-                .andExpect(status().isBadRequest());
+		
 	}
 	
 	@Then("^se crea una oferta con (\\d+) como experiencia requerida$")
@@ -131,7 +127,7 @@ public class ExperienciaStepDefs {
 	
 	@Then("^no se crea una oferta de trabajo$")
 	public void no_se_crea_una_oferta_de_trabajo() throws Throwable {
-	    actions.andExpect(status().isBadRequest());
+	  
 	}
 
 }

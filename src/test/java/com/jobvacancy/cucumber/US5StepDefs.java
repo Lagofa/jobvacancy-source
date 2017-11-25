@@ -122,7 +122,7 @@ public void se_creo_la_oferta_con_fecha_de_publicacion_dias_despues_de_hoy_and_f
 
 @Then("^no se creo la oferta con enDate$")
 public void no_se_creo_la_oferta_con_endDate() throws Throwable {
-	assertThat(exception.getMessage()).isEqualTo("Invalid endDate");
+	assertThat(exception.getMessage()).isEqualTo("Invalid End Date");
  }
 
 @When("^ingreso fecha de vencimiento (\\d+) dias antes de hoy y fecha de publicacion hoy$")
@@ -139,7 +139,7 @@ public void ingreso_fecha_de_vencimiento_dias_antes_de_hoy_y_fecha_de_publicacio
 
 @Then("^no se creo la oferta con endDate menor a starDate$")
 public void no_se_creo_la_oferta_con_endDate_menor_a_starDate() throws Throwable {
-	assertThat(exception.getMessage()).isEqualTo("Invalid endDate");
+	assertThat(exception.getMessage()).isEqualTo("Invalid End Date");
 }
 
 @When("^ingreso fecha vencimiento (\\d+) dias antes de hoy$")

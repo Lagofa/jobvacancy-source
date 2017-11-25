@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jobvacancy.Application;
 import com.jobvacancy.domain.JobOffer;
+import com.jobvacancy.domain.exception.TitleException;
 import com.jobvacancy.repository.JobOfferRepository;
 import com.jobvacancy.web.rest.util.Search;
 
@@ -36,7 +37,7 @@ public class SearchTest {
 	 private JobOffer jobOffer2;
 		
 	 @Before
-	 public void initTest() {
+	 public void initTest() throws TitleException {
 	 jobOffer = new JobOffer();
 	 jobOffer.setTitle(DEFAULT_TITLE);
 	 jobOffer.setLocation(DEFAULT_LOCATION);

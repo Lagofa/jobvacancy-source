@@ -3,6 +3,7 @@ package com.jobvacancy.web.rest;
 import com.jobvacancy.Application;
 import com.jobvacancy.domain.JobOffer;
 import com.jobvacancy.domain.User;
+import com.jobvacancy.domain.exception.TitleException;
 import com.jobvacancy.repository.JobOfferRepository;
 import com.jobvacancy.repository.UserRepository;
 import com.jobvacancy.service.MailService;
@@ -69,7 +70,7 @@ public class ApplicationResourceTest {
     private JobOffer offer;
 
     @PostConstruct
-    public void setup() {
+    public void setup() throws TitleException {
         MockitoAnnotations.initMocks(this);
         Optional<User> user = userRepository.findOneByLogin("user");
         offer = new JobOffer();
